@@ -1,0 +1,5 @@
+Metadata-Version: 2.4
+Name: knowno-eval
+Version: 0.1.0
+Summary: KnowNo-only evaluation harness with optional SAE steering
+Requires-Python: >=3.10

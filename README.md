@@ -27,8 +27,8 @@ pip install -e .
 
 ```bash
 python scripts/run_knowno_eval.py \
-  --csv data/knowno_for_eval.csv \
-  --out results_baseline.json \
+  --csv data/knowno_data_processed.csv \
+  --out results/results_baseline.json \
   --model_name google/gemma-2b-it \
   --num_examples 200
 ```
@@ -37,8 +37,8 @@ python scripts/run_knowno_eval.py \
 
 ```bash
 python scripts/run_knowno_eval.py \
-  --csv data/knowno_for_eval.csv \
-  --out results_steered.json \
+  --csv data/knowno_data_processed.csv \
+  --out results/results_steered.json \
   --model_name gemma-2-9b-it \
   --use_steering \
   --sae_release <SAE_RELEASE> \
@@ -53,7 +53,7 @@ python scripts/run_knowno_eval.py \
 ```bash
 python scripts/compute_knowno_metrics.py \
   --eval_json results_baseline.json \
-  --out metrics_baseline.json
+  --out results/metrics_baseline.json
 ```
 
 Override which categories "should ask" (clarification-necessary):
