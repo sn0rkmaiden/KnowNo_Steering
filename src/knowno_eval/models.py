@@ -116,21 +116,43 @@ class GemmaHookedModel:
         """
         tok = getattr(self.model, "tokenizer", None)
 
-        # Put the JSON constraint into a system message so it is strongly applied
+        # IMPORTANT: Many HF Gemma(-IT) chat templates do NOT support a "system" role.
+        # If we need to force JSON, inject the constraint into the *user* content.
         if force_json:
-            json_sys = {
-                "role": "system",
-                "content": "Return ONLY a valid JSON object and nothing else.",
-            }
-            # keep any existing system message first
-            if messages and (messages[0].get("role") or "").strip().lower() == "system":
-                messages = messages[:1] + [json_sys] + messages[1:]
+            json_hint = "Return ONLY a valid JSON object and nothing else."
+            if messages and (messages[-1].get("role") or "").strip().lower() == "user":
+                messages = list(messages)
+                messages[-1] = dict(messages[-1])
+                messages[-1]["content"] = (messages[-1].get("content") or "").rstrip() + "\n\n" + json_hint
             else:
-                messages = [json_sys] + messages
+                messages = list(messages) + [{"role": "user", "content": json_hint}]
 
         # Prefer HF chat template when available
         if tok is not None and hasattr(tok, "apply_chat_template") and getattr(tok, "chat_template", None):
-            return tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+            try:
+                return tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+            except Exception as e:
+                # If the model template doesn't support system role, merge any system content into the first user message.
+                msg = str(e).lower()
+                if "system role" in msg and "not supported" in msg:
+                    sys_chunks: List[str] = []
+                    new_messages: List[Dict[str, str]] = []
+                    for m in messages:
+                        role = (m.get("role") or "").strip().lower()
+                        if role == "system":
+                            sys_chunks.append((m.get("content") or "").strip())
+                        else:
+                            new_messages.append(m)
+                    sys_text = "\n".join([c for c in sys_chunks if c])
+                    if sys_text:
+                        if new_messages and (new_messages[0].get("role") or "").strip().lower() == "user":
+                            new_messages = list(new_messages)
+                            new_messages[0] = dict(new_messages[0])
+                            new_messages[0]["content"] = sys_text + "\n\n" + (new_messages[0].get("content") or "")
+                        else:
+                            new_messages = [{"role": "user", "content": sys_text}] + list(new_messages)
+                    return tok.apply_chat_template(new_messages, tokenize=False, add_generation_prompt=True)
+                # Any other template error -> fall back to plain text
 
         # Fallback: plain text (kept for non-chat models)
         parts: List[str] = []
