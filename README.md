@@ -48,6 +48,22 @@ python scripts/run_knowno_eval.py \
   --compute_max_per_prompt
 ```
 
+## Run multiple features with multiple steering strengths
+
+```python
+  python scripts/sweep_steering.py \
+    --csv data/knowno_data_processed.csv \
+    --model_name gemma-2-9b-it \
+    --sae_release <SAE_RELEASE> \
+    --sae_id <SAE_ID> \
+    --features 123,456,789 \
+    --strengths 0,2,4,6 \
+    --out_dir results/sweep \
+    --num_examples 200 \
+    --seed 0 \
+    --compute_max_per_prompt
+```
+
 ## Compute metrics
 
 ```bash
