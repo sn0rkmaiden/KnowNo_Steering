@@ -2,6 +2,7 @@ from __future__ import annotations
 import json
 from dataclasses import asdict
 from typing import Any, Dict, List, Optional
+import sys
 
 import pandas as pd
 from tqdm import tqdm
@@ -40,7 +41,7 @@ def run_knowno_eval(
     )
 
     results: List[Dict[str, Any]] = []
-    for _, row in tqdm(df.iterrows(), total=len(df)):
+    for _, row in tqdm(df.iterrows(), total=len(df), file=sys.stdout, dynamic_ncols=True):
         env = str(row.get("environment_full", "") or "")
         task = str(row.get("ambiguous_task", "") or "")
         ambiguity_type = str(row.get("ambiguity_type", "") or "")

@@ -1,64 +1,54 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
-KnowNo evaluation entrypoint with clean console output.
+Quiet KnowNo evaluation runner.
 
-Goals:
-- Keep a single progress bar for examples.
-- Suppress Hugging Face download progress bars + verbose warnings.
-- Avoid importing TensorFlow/Flax/JAX backends via Transformers where possible.
-
-Usage:
-  python scripts/run_knowno_eval.py --csv data/knowno_for_eval.csv --out results.json
+What it does:
+- Sets HF/Transformers env vars to reduce download/progress spam.
+- Optionally redirects STDERR (where TensorFlow/XLA cuDNN/cuBLAS "already registered" lines are printed).
+- Keeps a single progress bar from the evaluation loop.
 """
+
 from __future__ import annotations
 
 import os
-
-# ---------------------------
-# Must be set BEFORE importing transformers / knowno_eval
-# ---------------------------
-os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
-os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
-os.environ.setdefault("TRANSFORMERS_NO_FLAX", "1")
-os.environ.setdefault("TRANSFORMERS_NO_TQDM", "1")
-os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
-os.environ.setdefault("HF_DATASETS_DISABLE_PROGRESS_BARS", "1")
-os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")  # best-effort if TF is present
-
+import sys
 import argparse
-import logging
-import warnings
 
-# Reduce noisy warnings from optional deps (pydantic etc.)
-warnings.filterwarnings("ignore", category=UserWarning)
-warnings.filterwarnings("ignore", category=FutureWarning)
 
-# Reduce library logging noise
-logging.basicConfig(level=logging.ERROR)
-for name in [
-    "transformers",
-    "huggingface_hub",
-    "torch",
-    "transformer_lens",
-    "sae_lens",
-]:
-    logging.getLogger(name).setLevel(logging.ERROR)
+def _set_quiet_env() -> None:
+    # HuggingFace Hub: no download progress bars
+    os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
+    os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
 
-# Transformers also has its own logging control
-try:
-    from transformers.utils import logging as hf_logging  # type: ignore
-    hf_logging.set_verbosity_error()
-    hf_logging.disable_default_handler()
-    hf_logging.enable_propagation()
-except Exception:
-    pass
+    # Transformers: reduce verbosity and avoid TF/Flax backends
+    os.environ.setdefault("TRANSFORMERS_VERBOSITY", "error")
+    os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
+    os.environ.setdefault("TRANSFORMERS_NO_FLAX", "1")
+
+    # Tokenizers: avoid extra warnings + thread spam
+    os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+
+    # If TensorFlow/JAX *do* get imported elsewhere in the environment, reduce native logging
+    os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
+    os.environ.setdefault("ABSL_MIN_LOG_LEVEL", "3")
+
+
+def _redirect_stderr(path: str):
+    """
+    Redirect both sys.stderr and the underlying OS fd=2.
+    Needed because the XLA/cuDNN/cuBLAS warnings are C++ logs written to STDERR.
+    """
+    f = open(path, "w", buffering=1)
+    sys.stderr = f  # type: ignore
+    os.dup2(f.fileno(), 2)
+    return f
 
 
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--csv", required=True, help="Path to knowno_for_eval.csv")
     p.add_argument("--out", required=True, help="Where to write evaluation JSON")
-    p.add_argument("--model_name", default="google/gemma-2b-it", help="HF/TransformerLens model name")
+    p.add_argument("--model_name", default="google/gemma-2b-it", help="TransformerLens model name")
     p.add_argument("--num_examples", type=int, default=None)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--max_new_tokens", type=int, default=256)
@@ -72,31 +62,53 @@ def main() -> None:
     p.add_argument("--max_act", type=float, default=None)
     p.add_argument("--compute_max_per_prompt", action="store_true")
 
+    # output hygiene
+    p.add_argument(
+        "--stderr_log",
+        default=None,
+        help="Redirect STDERR to this file (silences XLA/cuDNN spam). "
+             "Default: '<out>.stderr.log'. Set to '-' to keep STDERR.",
+    )
+
     args = p.parse_args()
 
-    # Delayed import so env/logging settings apply before heavy libs load
-    from knowno_eval.eval import run_knowno_eval
-    from knowno_eval.models import SteeringConfig
+    _set_quiet_env()
 
-    steering = SteeringConfig(
-        enabled=bool(args.use_steering),
-        sae_release=args.sae_release,
-        sae_id=args.sae_id,
-        feature=args.steering_feature,
-        strength=float(args.steering_strength),
-        max_act=args.max_act,
-        compute_max_per_prompt=bool(args.compute_max_per_prompt),
-    )
+    # Redirect stderr BEFORE importing any ML libraries
+    stderr_file = None
+    stderr_path = args.stderr_log
+    if stderr_path is None:
+        stderr_path = args.out + ".stderr.log"
+    if stderr_path != "-":
+        stderr_file = _redirect_stderr(stderr_path)
 
-    run_knowno_eval(
-        csv_path=args.csv,
-        out_json=args.out,
-        model_name=args.model_name,
-        num_examples=args.num_examples,
-        seed=args.seed,
-        max_new_tokens=args.max_new_tokens,
-        steering=steering,
-    )
+    try:
+        from knowno_eval.eval import run_knowno_eval
+        from knowno_eval.models import SteeringConfig
+
+        steering = SteeringConfig(
+            enabled=bool(args.use_steering),
+            sae_release=args.sae_release,
+            sae_id=args.sae_id,
+            feature=args.steering_feature,
+            strength=float(args.steering_strength),
+            max_act=args.max_act,
+            compute_max_per_prompt=bool(args.compute_max_per_prompt),
+        )
+
+        run_knowno_eval(
+            csv_path=args.csv,
+            out_json=args.out,
+            model_name=args.model_name,
+            num_examples=args.num_examples,
+            seed=args.seed,
+            max_new_tokens=args.max_new_tokens,
+            steering=steering,
+        )
+    finally:
+        if stderr_file is not None:
+            stderr_file.flush()
+            stderr_file.close()
 
 
 if __name__ == "__main__":

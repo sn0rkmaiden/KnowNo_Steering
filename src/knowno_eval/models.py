@@ -7,6 +7,7 @@ from transformer_lens import HookedTransformer
 from sae_lens import SAE
 
 import re
+import inspect
 from functools import partial
 
 def _steering_hook(activations, hook, steering_vector, steering_strength: float, max_act: float):
@@ -49,14 +50,19 @@ def generate_with_steering(
         prepend_bos = False
         input_ids = model.to_tokens(prompt, prepend_bos=False)
     with model.hooks(fwd_hooks=[(sae.cfg.metadata.hook_name, steering_hook)]):
-        out = model.generate(
-            input_ids,
+        gen_kwargs = dict(
             max_new_tokens=max_new_tokens,
             temperature=temperature,
             top_p=top_p,
             stop_at_eos=False if model.cfg.device == "mps" else True,
             prepend_bos=prepend_bos,
         )
+        # TransformerLens `generate` shows a per-token tqdm bar when `verbose=True` (default).
+        # Disable it if the parameter exists.
+        if "verbose" in inspect.signature(model.generate).parameters:
+            gen_kwargs["verbose"] = False
+
+        out = model.generate(input_ids, **gen_kwargs)
 
     gen = out[0, input_ids.shape[1]:]
     return model.tokenizer.decode(gen.tolist(), skip_special_tokens=True).strip()
@@ -237,14 +243,17 @@ class GemmaHookedModel:
         else:
             # Decode only newly generated tokens to avoid prompt-echo / <eos> artifacts.
             toks = self.model.to_tokens(prompt_text, prepend_bos=False)
-            out = self.model.generate(
-                toks,
+            gen_kwargs = dict(
                 max_new_tokens=self.max_new_tokens,
                 temperature=0.7,
                 top_p=0.9,
                 stop_at_eos=False if self.model.cfg.device == "mps" else True,
                 prepend_bos=False,
             )
+            if "verbose" in inspect.signature(self.model.generate).parameters:
+                gen_kwargs["verbose"] = False
+
+            out = self.model.generate(toks, **gen_kwargs)
             gen = out[0, toks.shape[1]:]
             decoded = self.model.tokenizer.decode(gen.tolist(), skip_special_tokens=True).strip()
 
