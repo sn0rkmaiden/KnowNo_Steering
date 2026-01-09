@@ -64,6 +64,51 @@ python scripts/run_knowno_eval.py \
     --compute_max_per_prompt
 ```
 
+## Repeat the prompt experiment
+
+Experiment idea taken from paper "Prompt Repetition Improves Non-Reasoning LLMs"[[1]](#1).
+
+> `run_knowno_eval.py`has 2 extra flags: 
+>* `--prompt_repeat:{none,repeat2,repeat2_verbose,repeat3,padding}`
+>* `--repeat_stage:{{clarify,plan,both}}`
+
+Repeat the clarification prompt only:
+```python
+  python scripts/run_knowno_eval.py \
+    --csv data/knowno_data_processed.csv \
+    --out results/repeat2_clarify.json \
+    --model_name google/gemma-2b-it \
+    --seed 0 \
+    --num_examples 300 \
+    --prompt_repeat repeat2 \
+    --repeat_stage clarify
+```
+
+Repeat both clarification + final planning prompts:
+```python
+  python scripts/run_knowno_eval.py \
+    --csv data/knowno_data_processed.csv \
+    --out results/repeat2_both.json \
+    --model_name google/gemma-2b-it \
+    --seed 0 \
+    --num_examples 300 \
+    --prompt_repeat repeat2 \
+    --repeat_stage both
+```
+
+Control to check whether improvements come from repeating content vs just making the prompt longer:
+
+```python
+  python scripts/run_knowno_eval.py \
+    --csv data/knowno_for_eval.csv \
+    --out results/padding_both.json \
+    --model_name google/gemma-2b-it \
+    --seed 0 \
+    --num_examples 300 \
+    --prompt_repeat padding \
+    --repeat_stage both
+```
+
 ## Compute metrics
 
 ```bash
@@ -88,3 +133,6 @@ python scripts/compute_knowno_metrics.py \
 - **plan_location_accuracy**: whether the final plan mentions `intent_location`
 - **breakdown_by_category** in the saved metrics JSON
 
+## References
+<a id="1">[1]</a> 
+Leviathan, Y., Kalman, M. and Matias, Y., 2025. Prompt Repetition Improves Non-Reasoning LLMs. arXiv preprint arXiv:2512.14982.
