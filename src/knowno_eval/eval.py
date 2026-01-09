@@ -8,7 +8,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from .models import GemmaHookedModel, SteeringConfig
-from .prompts import build_clarify_prompt, build_final_plan_prompt
+from .prompts import build_clarify_prompt, build_final_plan_prompt, apply_prompt_repetition
 from .parsing import parse_clarify_json, coerce_clarify_schema
 
 def _pick_provider_choice(user_intent: str, intent_object: str) -> str:
@@ -29,6 +29,8 @@ def run_knowno_eval(
     seed: int = 0,
     max_new_tokens: int = 256,
     steering: Optional[SteeringConfig] = None,
+    prompt_repeat: str = "none",
+    repeat_stage: str = "both",
 ) -> str:
     df = pd.read_csv(csv_path)
     if num_examples is not None:
@@ -39,6 +41,10 @@ def run_knowno_eval(
         max_new_tokens=max_new_tokens,
         steering=steering or SteeringConfig(enabled=False),
     )
+
+    stage = (repeat_stage or "both").strip().lower()
+    repeat_clarify = stage in {"both", "clarify", "clarification"}
+    repeat_plan = stage in {"both", "plan", "final"}
 
     results: List[Dict[str, Any]] = []
     for _, row in tqdm(df.iterrows(), total=len(df), file=sys.stdout, dynamic_ncols=True):
@@ -52,6 +58,8 @@ def run_knowno_eval(
         user_intent = str(row.get("user_intent", "") or "")
 
         clarify_prompt = build_clarify_prompt(env, task)
+        if repeat_clarify:
+            clarify_prompt = apply_prompt_repetition(clarify_prompt, prompt_repeat)
         raw, _ = model.request(clarify_prompt, json_format=True)
         parsed = coerce_clarify_schema(parse_clarify_json(raw))
         questions = parsed["question"]
@@ -63,6 +71,8 @@ def run_knowno_eval(
             provider_reply = f"I meant: {provider_object}. Location/target: {intent_location}."
 
         final_prompt = build_final_plan_prompt(env, task, questions, provider_reply)
+        if repeat_plan:
+            final_prompt = apply_prompt_repetition(final_prompt, prompt_repeat)
         final_plan, _ = model.request(final_prompt, json_format=False)
 
         results.append({
@@ -89,6 +99,8 @@ def run_knowno_eval(
             "num_examples": len(results),
             "seed": seed,
             "steering": asdict(steering or SteeringConfig(enabled=False)),
+            "prompt_repeat": prompt_repeat,
+            "repeat_stage": repeat_stage,
         },
         "results": results,
     }

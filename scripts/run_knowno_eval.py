@@ -16,19 +16,16 @@ import argparse
 
 
 def _set_quiet_env() -> None:
-    # HuggingFace Hub: no download progress bars
+    # reduce logging
     os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
     os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
 
-    # Transformers: reduce verbosity and avoid TF/Flax backends
     os.environ.setdefault("TRANSFORMERS_VERBOSITY", "error")
     os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
     os.environ.setdefault("TRANSFORMERS_NO_FLAX", "1")
 
-    # Tokenizers: avoid extra warnings + thread spam
     os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
-    # If TensorFlow/JAX *do* get imported elsewhere in the environment, reduce native logging
     os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
     os.environ.setdefault("ABSL_MIN_LOG_LEVEL", "3")
 
@@ -61,6 +58,20 @@ def main() -> None:
     p.add_argument("--steering_strength", type=float, default=0.0)
     p.add_argument("--max_act", type=float, default=None)
     p.add_argument("--compute_max_per_prompt", action="store_true")
+
+    # prompt repetition experiment
+    p.add_argument(
+        "--prompt_repeat",
+        default="none",
+        choices=["none", "repeat2", "repeat2_verbose", "repeat3", "padding"],
+        help="Apply a repetition/padding transform to the prompt.",
+    )
+    p.add_argument(
+        "--repeat_stage",
+        default="both",
+        choices=["clarify", "plan", "both"],
+        help="Which stage(s) to apply --prompt_repeat to.",
+    )
 
     # output hygiene
     p.add_argument(

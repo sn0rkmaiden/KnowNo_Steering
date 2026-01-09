@@ -46,3 +46,47 @@ def build_final_plan_prompt(environment: str, task: str, questions: List[str], p
 
     parts.append("Now write your plan. Return only the plan text (no JSON).")
     return "\n\n".join(parts)
+
+def apply_prompt_repetition(prompt: str, mode: str = "none") -> str:
+    """Apply prompt repetition / padding transforms.
+
+    Modes:
+      - none:     <PROMPT>
+      - repeat2:  <PROMPT>\n\n<PROMPT>
+      - repeat2_verbose: <PROMPT>\n\nLet me repeat that:\n<PROMPT>
+      - repeat3:  <PROMPT>\n\nLet me repeat that:\n<PROMPT>\n\nLet me repeat that one more time:\n<PROMPT>
+      - padding:  <PROMPT> + filler to roughly match repeat2 length (char-based)
+
+    Note: padding is only a control condition; it is not intended to be meaningful text.
+    """
+    mode = (mode or "none").strip().lower()
+    if mode in {"none", ""}:
+        return prompt
+
+    if mode in {"repeat2", "repeat"}:
+        return prompt + "\n\n" + prompt
+
+    if mode in {"repeat2_verbose", "repeat_verbose", "verbose"}:
+        return prompt + "\n\nLet me repeat that:\n" + prompt
+
+    if mode in {"repeat3", "triple"}:
+        return (
+            prompt
+            + "\n\nLet me repeat that:\n"
+            + prompt
+            + "\n\nLet me repeat that one more time:\n"
+            + prompt
+        )
+
+    if mode in {"padding", "pad"}:
+        # Pad to ~2x the prompt length (roughly matching repeat2), using a low-semantic filler.
+        target_len = len(prompt) * 2
+        if len(prompt) >= target_len:
+            return prompt
+        needed = target_len - len(prompt)
+        # Use '. ' (2 chars) as the primitive; add a leading blank line for separation.
+        n = max(0, (needed - 2) // 2)
+        filler = "\n\n" + (". " * n)
+        return prompt + filler
+
+    raise ValueError(f"Unknown repetition mode: {mode}")
