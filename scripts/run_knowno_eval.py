@@ -115,6 +115,8 @@ def main() -> None:
             seed=args.seed,
             max_new_tokens=args.max_new_tokens,
             steering=steering,
+            prompt_repeat=args.prompt_repeat,
+            repeat_stage=args.repeat_stage,
         )
     finally:
         if stderr_file is not None:
