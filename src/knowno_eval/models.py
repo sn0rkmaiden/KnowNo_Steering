@@ -158,7 +158,6 @@ class GemmaHookedModel:
                         else:
                             new_messages = [{"role": "user", "content": sys_text}] + list(new_messages)
                     return tok.apply_chat_template(new_messages, tokenize=False, add_generation_prompt=True)
-                # Any other template error -> fall back to plain text
 
         # Fallback: plain text (kept for non-chat models)
         parts: List[str] = []
@@ -224,7 +223,7 @@ class GemmaHookedModel:
             turn_max = self.steering.max_act
             if self.steering.compute_max_per_prompt or turn_max is None:
                 turn_max = self._estimate_feature_max_for_prompt(prompt_text, int(self.steering.feature))
-                # avoid tiny/zero
+                # avoid zero
                 turn_max = max(1e-6, float(turn_max))
 
             prepend_bos = bool(getattr(self.sae.cfg.metadata, "prepend_bos", False))
