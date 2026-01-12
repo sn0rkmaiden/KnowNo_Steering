@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
-"""
+"""\
 Sweep SAE steering over multiple (feature, strength) combinations by repeatedly calling scripts/run_knowno_eval.py.
 
-Outputs are saved as:
+Default output filenames:
   steering_str{strength}_feat{feature}.json
 
-Example:
+If strength is (numerically) 0, the run is labeled as a baseline in the filename:
+  baseline_str0_feat{feature}.json
+
+If prompt repetition args are set, they are also included to make it obvious whether
+this is plain steering/baseline vs. repeated-prompt steering/baseline:
+  *_pr{prompt_repeat}[_stage{repeat_stage}].json
+
+Examples:
+  # plain steering sweep
   python scripts/sweep_steering.py \
     --csv data/knowno_for_eval.csv \
-    --model_name gemma-2-9b-it \
+    --model_name google/gemma-2b-it \
     --sae_release <SAE_RELEASE> \
     --sae_id <SAE_ID> \
     --features 123,456,789 \
@@ -17,7 +25,23 @@ Example:
     --num_examples 200 \
     --seed 0 \
     --compute_max_per_prompt
+
+  # steering sweep WITH prompt repetition
+  python scripts/sweep_steering.py \
+    --csv data/knowno_for_eval.csv \
+    --model_name google/gemma-2b-it \
+    --sae_release <SAE_RELEASE> \
+    --sae_id <SAE_ID> \
+    --features 123,456,789 \
+    --strengths 0,2,4,6 \
+    --out_dir results/sweep_repeat2 \
+    --prompt_repeat repeat2 \
+    --repeat_stage both \
+    --num_examples 200 \
+    --seed 0 \
+    --compute_max_per_prompt
 """
+
 from __future__ import annotations
 
 import argparse
@@ -27,30 +51,22 @@ import shlex
 import subprocess
 import sys
 from pathlib import Path
-from typing import List, Tuple
+from typing import List
 
 
-def _parse_list_arg(value: str, kind: str) -> List[str]:
-    """
-    Accept:
-      - comma-separated: "1,2,3"
-      - whitespace-separated: "1 2 3"
-      - single value: "1"
-    Returns list of strings as provided (trimmed).
-    """
+def _parse_list_arg(value: str) -> List[str]:
+    """Accept comma-separated, whitespace-separated, or a single value."""
     if value is None:
         return []
     v = value.strip()
     if not v:
         return []
-    # allow commas and/or whitespace
     parts = re.split(r"[,\s]+", v)
-    parts = [p.strip() for p in parts if p.strip()]
-    return parts
+    return [p.strip() for p in parts if p.strip()]
 
 
 def _read_lines(path: Path) -> List[str]:
-    lines = []
+    lines: List[str] = []
     for line in path.read_text(encoding="utf-8").splitlines():
         s = line.strip()
         if not s or s.startswith("#"):
@@ -60,14 +76,37 @@ def _read_lines(path: Path) -> List[str]:
 
 
 def _safe_strength_for_filename(s: str) -> str:
-    """
-    Keep filenames OS-friendly while still human-readable.
-    - replace '/' and spaces
-    - leave '.' intact (it's safe), but normalize very long floats.
-    """
-    s = s.strip()
-    s = s.replace("/", "_").replace(" ", "")
+    """Keep filenames OS-friendly while still human-readable."""
+    s = s.strip().replace("/", "_").replace(" ", "")
     return s
+
+
+def _safe_token_for_filename(s: str) -> str:
+    """Make an arbitrary short token safe to use in filenames."""
+    s = (s or "").strip()
+    if not s:
+        return ""
+    s = s.replace("/", "_").replace(" ", "")
+    return re.sub(r"[^A-Za-z0-9_.-]+", "_", s)
+
+
+def _is_baseline_strength(strength: str) -> bool:
+    """Treat numeric 0 strength as baseline for naming purposes."""
+    try:
+        return abs(float(strength)) < 1e-12
+    except Exception:
+        return False
+
+
+def _repeat_suffix(prompt_repeat: str, repeat_stage: str) -> str:
+    """Filename suffix for prompt repetition settings."""
+    suf = ""
+    if (prompt_repeat or "none") != "none":
+        suf += f"_pr{_safe_token_for_filename(prompt_repeat)}"
+    # stage is only meaningful to distinguish when it's not the default
+    if (repeat_stage or "both") != "both":
+        suf += f"_stage{_safe_token_for_filename(repeat_stage)}"
+    return suf
 
 
 def build_cmd(
@@ -80,6 +119,8 @@ def build_cmd(
     feature: str,
     strength: str,
     out_path: Path,
+    prompt_repeat: str,
+    repeat_stage: str,
     passthrough: List[str],
 ) -> List[str]:
     cmd = [
@@ -101,6 +142,11 @@ def build_cmd(
         "--steering_strength",
         str(strength),
     ]
+
+    # prompt repetition experiment (forwarded to run_knowno_eval.py)
+    cmd.extend(["--prompt_repeat", prompt_repeat])
+    cmd.extend(["--repeat_stage", repeat_stage])
+
     cmd.extend(passthrough)
     return cmd
 
@@ -108,7 +154,12 @@ def build_cmd(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Sweep steering features and strengths for KnowNo eval.")
     parser.add_argument("--csv", type=str, required=True, help="Path to KnowNo CSV (e.g., data/knowno_for_eval.csv).")
-    parser.add_argument("--model_name", type=str, required=True, help="HF model name or local identifier used by run_knowno_eval.py.")
+    parser.add_argument(
+        "--model_name",
+        type=str,
+        required=True,
+        help="HF model name or local identifier used by run_knowno_eval.py.",
+    )
     parser.add_argument("--sae_release", type=str, required=True, help="SAE release identifier (sae-lens).")
     parser.add_argument("--sae_id", type=str, required=True, help="SAE id within the release (sae-lens).")
 
@@ -125,7 +176,21 @@ def main() -> None:
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing output JSONs.")
     parser.add_argument("--dry_run", action="store_true", help="Print commands without executing them.")
 
-    # Everything else is passed through to run_knowno_eval.py (e.g., --num_examples, --seed, --device, --max_new_tokens, --compute_max_per_prompt, ...)
+    # prompt repetition experiment (same options as scripts/run_knowno_eval.py)
+    parser.add_argument(
+        "--prompt_repeat",
+        default="none",
+        choices=["none", "repeat2", "repeat2_verbose", "repeat3", "padding"],
+        help="Apply a repetition/padding transform to the prompt (forwarded to run_knowno_eval.py).",
+    )
+    parser.add_argument(
+        "--repeat_stage",
+        default="both",
+        choices=["clarify", "plan", "both"],
+        help="Which stage(s) to apply --prompt_repeat to (forwarded to run_knowno_eval.py).",
+    )
+
+    # Everything else is passed through to run_knowno_eval.py (e.g., --num_examples, --seed, --max_new_tokens, --compute_max_per_prompt, ...)
     args, passthrough = parser.parse_known_args()
 
     csv_path = Path(args.csv)
@@ -136,11 +201,12 @@ def main() -> None:
     if args.features_file:
         feats = _read_lines(Path(args.features_file))
     else:
-        feats = _parse_list_arg(args.features, "features")
+        feats = _parse_list_arg(args.features)
+
     if args.strengths_file:
         strengths = _read_lines(Path(args.strengths_file))
     else:
-        strengths = _parse_list_arg(args.strengths, "strengths")
+        strengths = _parse_list_arg(args.strengths)
 
     if not feats:
         raise SystemExit("No features provided.")
@@ -158,11 +224,14 @@ def main() -> None:
     total = len(feats) * len(strengths)
     i = 0
 
+    rep_suffix = _repeat_suffix(args.prompt_repeat, args.repeat_stage)
+
     for feat in feats:
         for strength in strengths:
             i += 1
             strength_str = _safe_strength_for_filename(str(strength))
-            out_path = out_dir / f"steering_str{strength_str}_feat{feat}.json"
+            mode = "baseline" if _is_baseline_strength(str(strength)) else "steering"
+            out_path = out_dir / f"{mode}_str{strength_str}_feat{feat}{rep_suffix}.json"
 
             if out_path.exists() and not args.overwrite:
                 print(f"[{i}/{total}] SKIP exists: {out_path}")
@@ -178,6 +247,8 @@ def main() -> None:
                 feature=feat,
                 strength=strength,
                 out_path=out_path,
+                prompt_repeat=args.prompt_repeat,
+                repeat_stage=args.repeat_stage,
                 passthrough=passthrough,
             )
 
