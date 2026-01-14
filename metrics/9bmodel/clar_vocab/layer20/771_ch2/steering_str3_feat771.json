@@ -1,0 +1,83 @@
+{
+  "n": 300,
+  "ask_precision": 0.2894736842105263,
+  "ask_recall": 0.7586206896551724,
+  "ask_f1": 0.41904761904761906,
+  "avg_question_similarity": 0.1727634844748827,
+  "plan_object_accuracy": 0.8633333333333333,
+  "plan_location_accuracy": 0.45666666666666667,
+  "breakdown_by_category": {
+    "creative_singlelabel_task": {
+      "n": 12,
+      "need_ask": 0,
+      "asked": 9,
+      "ask_acc": 0,
+      "ask_rate": 0.75,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.25
+    },
+    "spatial_ambiguous_task": {
+      "n": 60,
+      "need_ask": 60,
+      "asked": 43,
+      "ask_acc": 0,
+      "ask_rate": 0.7166666666666667,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.7166666666666667
+    },
+    "unambiguous_task": {
+      "n": 20,
+      "need_ask": 0,
+      "asked": 0,
+      "ask_acc": 0,
+      "ask_rate": 0.0,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 1.0
+    },
+    "creative_multilabel_task": {
+      "n": 18,
+      "need_ask": 18,
+      "asked": 16,
+      "ask_acc": 0,
+      "ask_rate": 0.8888888888888888,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.8888888888888888
+    },
+    "winograd_task": {
+      "n": 50,
+      "need_ask": 0,
+      "asked": 48,
+      "ask_acc": 0,
+      "ask_rate": 0.96,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.04
+    },
+    "unsafe_task": {
+      "n": 33,
+      "need_ask": 0,
+      "asked": 31,
+      "ask_acc": 0,
+      "ask_rate": 0.9393939393939394,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.06060606060606061
+    },
+    "singlelabel_task": {
+      "n": 98,
+      "need_ask": 0,
+      "asked": 74,
+      "ask_acc": 0,
+      "ask_rate": 0.7551020408163265,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.24489795918367346
+    },
+    "multilabel_task": {
+      "n": 9,
+      "need_ask": 9,
+      "asked": 7,
+      "ask_acc": 0,
+      "ask_rate": 0.7777777777777778,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.7777777777777778
+    }
+  }
+}

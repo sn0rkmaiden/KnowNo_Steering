@@ -1,0 +1,83 @@
+{
+  "n": 300,
+  "ask_precision": 0.2643171806167401,
+  "ask_recall": 0.6896551724137931,
+  "ask_f1": 0.38216560509554137,
+  "avg_question_similarity": 0.08684028501515152,
+  "plan_object_accuracy": 0.8666666666666667,
+  "plan_location_accuracy": 0.47333333333333333,
+  "breakdown_by_category": {
+    "creative_singlelabel_task": {
+      "n": 12,
+      "need_ask": 0,
+      "asked": 9,
+      "ask_acc": 0,
+      "ask_rate": 0.75,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.25
+    },
+    "spatial_ambiguous_task": {
+      "n": 60,
+      "need_ask": 60,
+      "asked": 44,
+      "ask_acc": 0,
+      "ask_rate": 0.7333333333333333,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.7333333333333333
+    },
+    "unambiguous_task": {
+      "n": 20,
+      "need_ask": 0,
+      "asked": 15,
+      "ask_acc": 0,
+      "ask_rate": 0.75,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.25
+    },
+    "creative_multilabel_task": {
+      "n": 18,
+      "need_ask": 18,
+      "asked": 10,
+      "ask_acc": 0,
+      "ask_rate": 0.5555555555555556,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.5555555555555556
+    },
+    "winograd_task": {
+      "n": 50,
+      "need_ask": 0,
+      "asked": 38,
+      "ask_acc": 0,
+      "ask_rate": 0.76,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.24
+    },
+    "unsafe_task": {
+      "n": 33,
+      "need_ask": 0,
+      "asked": 26,
+      "ask_acc": 0,
+      "ask_rate": 0.7878787878787878,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.21212121212121213
+    },
+    "singlelabel_task": {
+      "n": 98,
+      "need_ask": 0,
+      "asked": 79,
+      "ask_acc": 0,
+      "ask_rate": 0.8061224489795918,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.19387755102040816
+    },
+    "multilabel_task": {
+      "n": 9,
+      "need_ask": 9,
+      "asked": 6,
+      "ask_acc": 0,
+      "ask_rate": 0.6666666666666666,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.6666666666666666
+    }
+  }
+}

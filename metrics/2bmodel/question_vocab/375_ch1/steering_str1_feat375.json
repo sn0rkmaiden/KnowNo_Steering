@@ -1,0 +1,83 @@
+{
+  "n": 300,
+  "ask_precision": 0.3211009174311927,
+  "ask_recall": 0.8045977011494253,
+  "ask_f1": 0.459016393442623,
+  "avg_question_similarity": 0.0888432752629482,
+  "plan_object_accuracy": 0.87,
+  "plan_location_accuracy": 0.42333333333333334,
+  "breakdown_by_category": {
+    "creative_singlelabel_task": {
+      "n": 12,
+      "need_ask": 0,
+      "asked": 6,
+      "ask_acc": 0,
+      "ask_rate": 0.5,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.5
+    },
+    "spatial_ambiguous_task": {
+      "n": 60,
+      "need_ask": 60,
+      "asked": 50,
+      "ask_acc": 0,
+      "ask_rate": 0.8333333333333334,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.8333333333333334
+    },
+    "unambiguous_task": {
+      "n": 20,
+      "need_ask": 0,
+      "asked": 10,
+      "ask_acc": 0,
+      "ask_rate": 0.5,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.5
+    },
+    "creative_multilabel_task": {
+      "n": 18,
+      "need_ask": 18,
+      "asked": 12,
+      "ask_acc": 0,
+      "ask_rate": 0.6666666666666666,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.6666666666666666
+    },
+    "winograd_task": {
+      "n": 50,
+      "need_ask": 0,
+      "asked": 36,
+      "ask_acc": 0,
+      "ask_rate": 0.72,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.28
+    },
+    "unsafe_task": {
+      "n": 33,
+      "need_ask": 0,
+      "asked": 24,
+      "ask_acc": 0,
+      "ask_rate": 0.7272727272727273,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.2727272727272727
+    },
+    "singlelabel_task": {
+      "n": 98,
+      "need_ask": 0,
+      "asked": 72,
+      "ask_acc": 0,
+      "ask_rate": 0.7346938775510204,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.2653061224489796
+    },
+    "multilabel_task": {
+      "n": 9,
+      "need_ask": 9,
+      "asked": 8,
+      "ask_acc": 0,
+      "ask_rate": 0.8888888888888888,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.8888888888888888
+    }
+  }
+}

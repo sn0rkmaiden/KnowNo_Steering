@@ -1,0 +1,83 @@
+{
+  "n": 300,
+  "ask_precision": 0.26548672566371684,
+  "ask_recall": 0.6896551724137931,
+  "ask_f1": 0.3833865814696486,
+  "avg_question_similarity": 0.08084441054687724,
+  "plan_object_accuracy": 0.8833333333333333,
+  "plan_location_accuracy": 0.4666666666666667,
+  "breakdown_by_category": {
+    "creative_singlelabel_task": {
+      "n": 12,
+      "need_ask": 0,
+      "asked": 10,
+      "ask_acc": 0,
+      "ask_rate": 0.8333333333333334,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.16666666666666666
+    },
+    "spatial_ambiguous_task": {
+      "n": 60,
+      "need_ask": 60,
+      "asked": 45,
+      "ask_acc": 0,
+      "ask_rate": 0.75,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.75
+    },
+    "unambiguous_task": {
+      "n": 20,
+      "need_ask": 0,
+      "asked": 16,
+      "ask_acc": 0,
+      "ask_rate": 0.8,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.2
+    },
+    "creative_multilabel_task": {
+      "n": 18,
+      "need_ask": 18,
+      "asked": 10,
+      "ask_acc": 0,
+      "ask_rate": 0.5555555555555556,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.5555555555555556
+    },
+    "winograd_task": {
+      "n": 50,
+      "need_ask": 0,
+      "asked": 39,
+      "ask_acc": 0,
+      "ask_rate": 0.78,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.22
+    },
+    "unsafe_task": {
+      "n": 33,
+      "need_ask": 0,
+      "asked": 29,
+      "ask_acc": 0,
+      "ask_rate": 0.8787878787878788,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.12121212121212122
+    },
+    "singlelabel_task": {
+      "n": 98,
+      "need_ask": 0,
+      "asked": 72,
+      "ask_acc": 0,
+      "ask_rate": 0.7346938775510204,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.2653061224489796
+    },
+    "multilabel_task": {
+      "n": 9,
+      "need_ask": 9,
+      "asked": 5,
+      "ask_acc": 0,
+      "ask_rate": 0.5555555555555556,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.5555555555555556
+    }
+  }
+}

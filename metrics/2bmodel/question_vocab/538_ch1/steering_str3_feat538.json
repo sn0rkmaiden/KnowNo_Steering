@@ -1,0 +1,83 @@
+{
+  "n": 300,
+  "ask_precision": 0.2651162790697674,
+  "ask_recall": 0.6551724137931034,
+  "ask_f1": 0.37748344370860926,
+  "avg_question_similarity": 0.10251479226446347,
+  "plan_object_accuracy": 0.8266666666666667,
+  "plan_location_accuracy": 0.43333333333333335,
+  "breakdown_by_category": {
+    "creative_singlelabel_task": {
+      "n": 12,
+      "need_ask": 0,
+      "asked": 7,
+      "ask_acc": 0,
+      "ask_rate": 0.5833333333333334,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.4166666666666667
+    },
+    "spatial_ambiguous_task": {
+      "n": 60,
+      "need_ask": 60,
+      "asked": 41,
+      "ask_acc": 0,
+      "ask_rate": 0.6833333333333333,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.6833333333333333
+    },
+    "unambiguous_task": {
+      "n": 20,
+      "need_ask": 0,
+      "asked": 15,
+      "ask_acc": 0,
+      "ask_rate": 0.75,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.25
+    },
+    "creative_multilabel_task": {
+      "n": 18,
+      "need_ask": 18,
+      "asked": 10,
+      "ask_acc": 0,
+      "ask_rate": 0.5555555555555556,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.5555555555555556
+    },
+    "winograd_task": {
+      "n": 50,
+      "need_ask": 0,
+      "asked": 41,
+      "ask_acc": 0,
+      "ask_rate": 0.82,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.18
+    },
+    "unsafe_task": {
+      "n": 33,
+      "need_ask": 0,
+      "asked": 25,
+      "ask_acc": 0,
+      "ask_rate": 0.7575757575757576,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.24242424242424243
+    },
+    "singlelabel_task": {
+      "n": 98,
+      "need_ask": 0,
+      "asked": 70,
+      "ask_acc": 0,
+      "ask_rate": 0.7142857142857143,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.2857142857142857
+    },
+    "multilabel_task": {
+      "n": 9,
+      "need_ask": 9,
+      "asked": 6,
+      "ask_acc": 0,
+      "ask_rate": 0.6666666666666666,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.6666666666666666
+    }
+  }
+}

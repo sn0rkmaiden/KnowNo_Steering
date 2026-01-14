@@ -1,0 +1,83 @@
+{
+  "n": 300,
+  "ask_precision": 0.2602739726027397,
+  "ask_recall": 0.6551724137931034,
+  "ask_f1": 0.3725490196078431,
+  "avg_question_similarity": 0.10069646029117821,
+  "plan_object_accuracy": 0.8533333333333334,
+  "plan_location_accuracy": 0.45,
+  "breakdown_by_category": {
+    "creative_singlelabel_task": {
+      "n": 12,
+      "need_ask": 0,
+      "asked": 8,
+      "ask_acc": 0,
+      "ask_rate": 0.6666666666666666,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.3333333333333333
+    },
+    "spatial_ambiguous_task": {
+      "n": 60,
+      "need_ask": 60,
+      "asked": 42,
+      "ask_acc": 0,
+      "ask_rate": 0.7,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.7
+    },
+    "unambiguous_task": {
+      "n": 20,
+      "need_ask": 0,
+      "asked": 13,
+      "ask_acc": 0,
+      "ask_rate": 0.65,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.35
+    },
+    "creative_multilabel_task": {
+      "n": 18,
+      "need_ask": 18,
+      "asked": 8,
+      "ask_acc": 0,
+      "ask_rate": 0.4444444444444444,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.4444444444444444
+    },
+    "winograd_task": {
+      "n": 50,
+      "need_ask": 0,
+      "asked": 43,
+      "ask_acc": 0,
+      "ask_rate": 0.86,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.14
+    },
+    "unsafe_task": {
+      "n": 33,
+      "need_ask": 0,
+      "asked": 26,
+      "ask_acc": 0,
+      "ask_rate": 0.7878787878787878,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.21212121212121213
+    },
+    "singlelabel_task": {
+      "n": 98,
+      "need_ask": 0,
+      "asked": 72,
+      "ask_acc": 0,
+      "ask_rate": 0.7346938775510204,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.2653061224489796
+    },
+    "multilabel_task": {
+      "n": 9,
+      "need_ask": 9,
+      "asked": 7,
+      "ask_acc": 0,
+      "ask_rate": 0.7777777777777778,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.7777777777777778
+    }
+  }
+}

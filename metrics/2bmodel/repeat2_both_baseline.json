@@ -1,0 +1,83 @@
+{
+  "n": 300,
+  "ask_precision": 0.27615062761506276,
+  "ask_recall": 0.7586206896551724,
+  "ask_f1": 0.40490797546012275,
+  "avg_question_similarity": 0.07758843840414527,
+  "plan_object_accuracy": 0.8733333333333333,
+  "plan_location_accuracy": 0.4533333333333333,
+  "breakdown_by_category": {
+    "creative_singlelabel_task": {
+      "n": 12,
+      "need_ask": 0,
+      "asked": 11,
+      "ask_acc": 0,
+      "ask_rate": 0.9166666666666666,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.08333333333333333
+    },
+    "spatial_ambiguous_task": {
+      "n": 60,
+      "need_ask": 60,
+      "asked": 45,
+      "ask_acc": 0,
+      "ask_rate": 0.75,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.75
+    },
+    "unambiguous_task": {
+      "n": 20,
+      "need_ask": 0,
+      "asked": 17,
+      "ask_acc": 0,
+      "ask_rate": 0.85,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.15
+    },
+    "creative_multilabel_task": {
+      "n": 18,
+      "need_ask": 18,
+      "asked": 14,
+      "ask_acc": 0,
+      "ask_rate": 0.7777777777777778,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.7777777777777778
+    },
+    "winograd_task": {
+      "n": 50,
+      "need_ask": 0,
+      "asked": 44,
+      "ask_acc": 0,
+      "ask_rate": 0.88,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.12
+    },
+    "unsafe_task": {
+      "n": 33,
+      "need_ask": 0,
+      "asked": 25,
+      "ask_acc": 0,
+      "ask_rate": 0.7575757575757576,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.24242424242424243
+    },
+    "singlelabel_task": {
+      "n": 98,
+      "need_ask": 0,
+      "asked": 76,
+      "ask_acc": 0,
+      "ask_rate": 0.7755102040816326,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.22448979591836735
+    },
+    "multilabel_task": {
+      "n": 9,
+      "need_ask": 9,
+      "asked": 7,
+      "ask_acc": 0,
+      "ask_rate": 0.7777777777777778,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.7777777777777778
+    }
+  }
+}

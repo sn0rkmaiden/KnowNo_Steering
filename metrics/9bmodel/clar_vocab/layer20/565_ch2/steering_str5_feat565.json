@@ -1,0 +1,83 @@
+{
+  "n": 300,
+  "ask_precision": 0.2542372881355932,
+  "ask_recall": 0.6896551724137931,
+  "ask_f1": 0.3715170278637771,
+  "avg_question_similarity": 0.23645195406738015,
+  "plan_object_accuracy": 0.8633333333333333,
+  "plan_location_accuracy": 0.49666666666666665,
+  "breakdown_by_category": {
+    "creative_singlelabel_task": {
+      "n": 12,
+      "need_ask": 0,
+      "asked": 7,
+      "ask_acc": 0,
+      "ask_rate": 0.5833333333333334,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.4166666666666667
+    },
+    "spatial_ambiguous_task": {
+      "n": 60,
+      "need_ask": 60,
+      "asked": 35,
+      "ask_acc": 0,
+      "ask_rate": 0.5833333333333334,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.5833333333333334
+    },
+    "unambiguous_task": {
+      "n": 20,
+      "need_ask": 0,
+      "asked": 0,
+      "ask_acc": 0,
+      "ask_rate": 0.0,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 1.0
+    },
+    "creative_multilabel_task": {
+      "n": 18,
+      "need_ask": 18,
+      "asked": 16,
+      "ask_acc": 0,
+      "ask_rate": 0.8888888888888888,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.8888888888888888
+    },
+    "winograd_task": {
+      "n": 50,
+      "need_ask": 0,
+      "asked": 43,
+      "ask_acc": 0,
+      "ask_rate": 0.86,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.14
+    },
+    "unsafe_task": {
+      "n": 33,
+      "need_ask": 0,
+      "asked": 32,
+      "ask_acc": 0,
+      "ask_rate": 0.9696969696969697,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.030303030303030304
+    },
+    "singlelabel_task": {
+      "n": 98,
+      "need_ask": 0,
+      "asked": 94,
+      "ask_acc": 0,
+      "ask_rate": 0.9591836734693877,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.04081632653061224
+    },
+    "multilabel_task": {
+      "n": 9,
+      "need_ask": 9,
+      "asked": 9,
+      "ask_acc": 0,
+      "ask_rate": 1.0,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 1.0
+    }
+  }
+}

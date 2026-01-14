@@ -1,0 +1,83 @@
+{
+  "n": 300,
+  "ask_precision": 0.28820960698689957,
+  "ask_recall": 0.7586206896551724,
+  "ask_f1": 0.4177215189873418,
+  "avg_question_similarity": 0.09933208805902186,
+  "plan_object_accuracy": 0.86,
+  "plan_location_accuracy": 0.4766666666666667,
+  "breakdown_by_category": {
+    "creative_singlelabel_task": {
+      "n": 12,
+      "need_ask": 0,
+      "asked": 5,
+      "ask_acc": 0,
+      "ask_rate": 0.4166666666666667,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.5833333333333334
+    },
+    "spatial_ambiguous_task": {
+      "n": 60,
+      "need_ask": 60,
+      "asked": 45,
+      "ask_acc": 0,
+      "ask_rate": 0.75,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.75
+    },
+    "unambiguous_task": {
+      "n": 20,
+      "need_ask": 0,
+      "asked": 15,
+      "ask_acc": 0,
+      "ask_rate": 0.75,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.25
+    },
+    "creative_multilabel_task": {
+      "n": 18,
+      "need_ask": 18,
+      "asked": 12,
+      "ask_acc": 0,
+      "ask_rate": 0.6666666666666666,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.6666666666666666
+    },
+    "winograd_task": {
+      "n": 50,
+      "need_ask": 0,
+      "asked": 36,
+      "ask_acc": 0,
+      "ask_rate": 0.72,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.28
+    },
+    "unsafe_task": {
+      "n": 33,
+      "need_ask": 0,
+      "asked": 24,
+      "ask_acc": 0,
+      "ask_rate": 0.7272727272727273,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.2727272727272727
+    },
+    "singlelabel_task": {
+      "n": 98,
+      "need_ask": 0,
+      "asked": 83,
+      "ask_acc": 0,
+      "ask_rate": 0.8469387755102041,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.15306122448979592
+    },
+    "multilabel_task": {
+      "n": 9,
+      "need_ask": 9,
+      "asked": 9,
+      "ask_acc": 0,
+      "ask_rate": 1.0,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 1.0
+    }
+  }
+}

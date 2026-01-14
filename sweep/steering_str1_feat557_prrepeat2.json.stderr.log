@@ -1,0 +1,7 @@
+Cancellation requested; stopping current tasks.
+object address  : 0x7e1e5a699120
+object refcount : 2
+object type     : 0x87aee0
+object type name: KeyboardInterrupt
+object repr     : KeyboardInterrupt()
+lost sys.stderr

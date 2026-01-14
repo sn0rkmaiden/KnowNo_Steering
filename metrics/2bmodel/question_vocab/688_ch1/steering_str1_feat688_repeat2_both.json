@@ -1,0 +1,83 @@
+{
+  "n": 300,
+  "ask_precision": 0.25877192982456143,
+  "ask_recall": 0.6781609195402298,
+  "ask_f1": 0.3746031746031746,
+  "avg_question_similarity": 0.0950245207159362,
+  "plan_object_accuracy": 0.88,
+  "plan_location_accuracy": 0.49,
+  "breakdown_by_category": {
+    "creative_singlelabel_task": {
+      "n": 12,
+      "need_ask": 0,
+      "asked": 10,
+      "ask_acc": 0,
+      "ask_rate": 0.8333333333333334,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.16666666666666666
+    },
+    "spatial_ambiguous_task": {
+      "n": 60,
+      "need_ask": 60,
+      "asked": 42,
+      "ask_acc": 0,
+      "ask_rate": 0.7,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.7
+    },
+    "unambiguous_task": {
+      "n": 20,
+      "need_ask": 0,
+      "asked": 17,
+      "ask_acc": 0,
+      "ask_rate": 0.85,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.15
+    },
+    "creative_multilabel_task": {
+      "n": 18,
+      "need_ask": 18,
+      "asked": 11,
+      "ask_acc": 0,
+      "ask_rate": 0.6111111111111112,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.6111111111111112
+    },
+    "winograd_task": {
+      "n": 50,
+      "need_ask": 0,
+      "asked": 44,
+      "ask_acc": 0,
+      "ask_rate": 0.88,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.12
+    },
+    "unsafe_task": {
+      "n": 33,
+      "need_ask": 0,
+      "asked": 24,
+      "ask_acc": 0,
+      "ask_rate": 0.7272727272727273,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.2727272727272727
+    },
+    "singlelabel_task": {
+      "n": 98,
+      "need_ask": 0,
+      "asked": 74,
+      "ask_acc": 0,
+      "ask_rate": 0.7551020408163265,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.24489795918367346
+    },
+    "multilabel_task": {
+      "n": 9,
+      "need_ask": 9,
+      "asked": 6,
+      "ask_acc": 0,
+      "ask_rate": 0.6666666666666666,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.6666666666666666
+    }
+  }
+}

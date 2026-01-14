@@ -1,0 +1,83 @@
+{
+  "n": 300,
+  "ask_precision": 0.2863636363636364,
+  "ask_recall": 0.7241379310344828,
+  "ask_f1": 0.4104234527687296,
+  "avg_question_similarity": 0.08903188617260668,
+  "plan_object_accuracy": 0.8766666666666667,
+  "plan_location_accuracy": 0.44666666666666666,
+  "breakdown_by_category": {
+    "creative_singlelabel_task": {
+      "n": 12,
+      "need_ask": 0,
+      "asked": 8,
+      "ask_acc": 0,
+      "ask_rate": 0.6666666666666666,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.3333333333333333
+    },
+    "spatial_ambiguous_task": {
+      "n": 60,
+      "need_ask": 60,
+      "asked": 42,
+      "ask_acc": 0,
+      "ask_rate": 0.7,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.7
+    },
+    "unambiguous_task": {
+      "n": 20,
+      "need_ask": 0,
+      "asked": 14,
+      "ask_acc": 0,
+      "ask_rate": 0.7,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.3
+    },
+    "creative_multilabel_task": {
+      "n": 18,
+      "need_ask": 18,
+      "asked": 15,
+      "ask_acc": 0,
+      "ask_rate": 0.8333333333333334,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.8333333333333334
+    },
+    "winograd_task": {
+      "n": 50,
+      "need_ask": 0,
+      "asked": 38,
+      "ask_acc": 0,
+      "ask_rate": 0.76,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.24
+    },
+    "unsafe_task": {
+      "n": 33,
+      "need_ask": 0,
+      "asked": 24,
+      "ask_acc": 0,
+      "ask_rate": 0.7272727272727273,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.2727272727272727
+    },
+    "singlelabel_task": {
+      "n": 98,
+      "need_ask": 0,
+      "asked": 73,
+      "ask_acc": 0,
+      "ask_rate": 0.7448979591836735,
+      "need_rate": 0.0,
+      "ask_decision_accuracy": 0.25510204081632654
+    },
+    "multilabel_task": {
+      "n": 9,
+      "need_ask": 9,
+      "asked": 6,
+      "ask_acc": 0,
+      "ask_rate": 0.6666666666666666,
+      "need_rate": 1.0,
+      "ask_decision_accuracy": 0.6666666666666666
+    }
+  }
+}
